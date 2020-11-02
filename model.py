@@ -58,7 +58,7 @@ class Net(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         images, key_points = batch
         key_points = key_points.view(key_points.size(0), -1)
-        images, key_points = images.type(torch.FloatTensor), key_points.type(torch.FloatTensor)
+        images, key_points = images.float() , key_points.float()
 
         y_hat = self(images)
 
