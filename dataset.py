@@ -27,7 +27,7 @@ class FacialKeypointsDataset(Dataset):
         # Load image and convert to grayscale
         image = np.copy(np.asarray(Image.open(image_path).convert('L')))
         
-        key_points = self.key_pts_frame.iloc[idx, 1:].as_matrix()
+        key_points = self.key_pts_frame.iloc[idx, 1:].to_numpy()
         key_points = key_points.astype('float').reshape(-1, 2)
 
         sample = self.transform((image, key_points))
