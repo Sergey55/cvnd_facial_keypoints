@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset
 from PIL import Image
@@ -23,14 +24,15 @@ class FacialKeypointsDataset(Dataset):
         image_path = os.path.join(self.root_dir,
                                 self.key_pts_frame.iloc[idx, 0])
 
-        # Load image and convert to graysacel
-        image = Image.open(image_path).convert('L')
-        image = self.transform(image)
+        # Load image and convert to grayscale
+        image = np.copy(np.asarray(Image.open(image_path).convert('L')))
         
         key_points = self.key_pts_frame.iloc[idx, 1:].as_matrix()
-        key_points = key_points.astype('float')
+        key_points = key_points.astype('float').reshape(-1, 2)
 
-        return image, key_points
+        sample = self.transform((image, key_points))
+
+        return sample
 
     def __len__(self):
         return len(self.key_pts_frame)        
