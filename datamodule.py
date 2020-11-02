@@ -2,10 +2,10 @@ import os
 import pytorch_lightning as pl
 
 from torch.utils.data import DataLoader
-from torchvision import transforms as transforms
+import torchvision.transforms as transforms
 
 from dataset import FacialKeypointsDataset
-
+from transforms import Rescale, RandomCrop, Normalize, ToTensor
 
 class FacialKeypointsDatamodule(pl.LightningDataModule):
     def __init__(self,
@@ -33,10 +33,10 @@ class FacialKeypointsDatamodule(pl.LightningDataModule):
 
     def train_dataloader(self):
         transformations = transforms.Compose([
-            transforms.Resize(256),
-            transforms.RandomCrop(224), 
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor()
+            Rescale(250),
+            RandomCrop(224),
+            Normalize(),
+            ToTensor()
         ])
 
         train_images_path = os.path.join(self.root_dir, 'training')
@@ -56,8 +56,10 @@ class FacialKeypointsDatamodule(pl.LightningDataModule):
 
     def test_dataloader(self):
         transformations = transforms.Compose([
-            transforms.Resize(224),
-            transforms.ToTensor()
+            Rescale(250),
+            RandomCrop(224),
+            Normalize(),
+            ToTensor()
         ])
 
         train_images_path = os.path.join(self.root_dir, 'test')
