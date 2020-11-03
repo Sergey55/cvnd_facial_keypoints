@@ -2,6 +2,8 @@
 
 import torch
 import torch.optim as optim
+
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
@@ -61,7 +63,18 @@ class Net(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = optim.Adam(self.parameters(), lr=0.001)
 
-        return optimizer
+        scheduler = ReduceLROnPlateau(
+            optimizer, 
+            mode='min', 
+            patience=10, 
+            factor=0.5, 
+            verbose=True)
+
+        return {
+           'optimizer': optimizer,
+           'lr_scheduler': scheduler,
+           'monitor': 'loss'
+        }
 
     def training_step(self, batch, batch_idx):
         images, key_points = batch
