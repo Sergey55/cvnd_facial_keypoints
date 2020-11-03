@@ -50,8 +50,8 @@ class Net(pl.LightningModule):
 
         x = x.view(x.size(0), -1)
 
-        x = self.dropout2(F.relu(self.fc1(x)))
-        x = self.dropout2(F.relu(self.fc2(x)))
+        x = self.dropout2(F.elu(self.fc1(x)))
+        x = self.dropout2(F.elu(self.fc2(x)))
         x = self.fc3(x)
 
         return x
@@ -70,6 +70,6 @@ class Net(pl.LightningModule):
 
         loss = self.criterion(y_hat, key_points)
 
-        self.log('train_loss_step', acc, on_step=True, on_epoch=False)
+        self.log('train_loss_step', loss, on_step=True, on_epoch=False)
 
         return {'loss': loss}
