@@ -30,8 +30,10 @@ class Net(pl.LightningModule):
         self.fc2 = nn.Linear(2048, 1024)
         self.fc3 = nn.Linear(1024, 136)
 
-        self.dropout1 = nn.Dropout(0.1)
-        self.dropout2 = nn.Dropout(0.25)
+        self.dropout1 = nn.Dropout(p=0.1)
+        self.dropout2 = nn.Dropout(p=0.2)
+        self.dropout3 = nn.Dropout(p=0.3)
+        self.dropout4 = nn.Dropout(p=0.4)
 
         self.criterion = nn.MSELoss()
         
@@ -40,18 +42,18 @@ class Net(pl.LightningModule):
         x = self.maxPooling(F.relu(self.conv1(x)))
         x = self.dropout1(x)
         x = self.maxPooling(F.relu(self.conv2(x)))
-        x = self.dropout1(x)
+        x = self.dropout2(x)
         x = self.maxPooling(F.relu(self.conv3(x)))
-        x = self.dropout1(x)
+        x = self.dropout3(x)
         x = self.maxPooling(F.relu(self.conv4(x)))
-        x = self.dropout1(x)
+        x = self.dropout3(x)
         x = self.maxPooling(F.relu(self.conv5(x)))
-        x = self.dropout1(x)
+        x = self.dropout4(x)
 
         x = x.view(x.size(0), -1)
 
-        x = self.dropout2(F.elu(self.fc1(x)))
-        x = self.dropout2(F.elu(self.fc2(x)))
+        x = self.dropout4(F.relu(self.fc1(x)))
+        x = self.dropout4(F.relu(self.fc2(x)))
         x = self.fc3(x)
 
         return x
