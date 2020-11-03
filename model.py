@@ -70,4 +70,6 @@ class Net(pl.LightningModule):
 
         loss = self.criterion(y_hat, key_points)
 
+        self.log('train_loss_step', acc, on_step=True, on_epoch=False)
+
         return {'loss': loss}
