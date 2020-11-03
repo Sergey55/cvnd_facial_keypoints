@@ -32,10 +32,8 @@ class Net(pl.LightningModule):
         self.fc2 = nn.Linear(2048, 1024)
         self.fc3 = nn.Linear(1024, 136)
 
-        self.dropout1 = nn.Dropout(p=0.1)
-        self.dropout2 = nn.Dropout(p=0.2)
-        self.dropout3 = nn.Dropout(p=0.3)
-        self.dropout4 = nn.Dropout(p=0.4)
+        self.dropout1 = nn.Dropout(0.1)
+        self.dropout2 = nn.Dropout(0.25)
 
         self.criterion = nn.MSELoss()
         
@@ -44,18 +42,18 @@ class Net(pl.LightningModule):
         x = self.maxPooling(F.relu(self.conv1(x)))
         x = self.dropout1(x)
         x = self.maxPooling(F.relu(self.conv2(x)))
-        x = self.dropout2(x)
+        x = self.dropout1(x)
         x = self.maxPooling(F.relu(self.conv3(x)))
-        x = self.dropout3(x)
+        x = self.dropout1(x)
         x = self.maxPooling(F.relu(self.conv4(x)))
-        x = self.dropout3(x)
+        x = self.dropout1(x)
         x = self.maxPooling(F.relu(self.conv5(x)))
-        x = self.dropout4(x)
+        x = self.dropout1(x)
 
         x = x.view(x.size(0), -1)
 
-        x = self.dropout4(F.relu(self.fc1(x)))
-        x = self.dropout4(F.relu(self.fc2(x)))
+        x = self.dropout2(F.elu(self.fc1(x)))
+        x = self.dropout2(F.elu(self.fc2(x)))
         x = self.fc3(x)
 
         return x
@@ -73,7 +71,7 @@ class Net(pl.LightningModule):
         return {
            'optimizer': optimizer,
            'lr_scheduler': scheduler,
-           'monitor': 'loss'
+           'monitor': 'train_loss'
         }
 
     def training_step(self, batch, batch_idx):
@@ -85,6 +83,6 @@ class Net(pl.LightningModule):
 
         loss = self.criterion(y_hat, key_points)
 
-        self.log('train_loss_step', loss, on_step=True, on_epoch=False)
+        self.log('train_loss', loss, on_step=True, on_epoch=True)
 
         return {'loss': loss}
