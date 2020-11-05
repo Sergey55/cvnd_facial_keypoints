@@ -76,10 +76,17 @@ transformations = Compose([
     ToTensor()
 ])
 
-image = Image.open('./images/michelle_detected.png')
-tensor = transformations(image).unsqueeze(0)
+image_path = '{image_name}.jpg'
 
-result_pts = model.sample(tensor)
+image = np.copy(np.asarray(Image.open(image_path).convert('L')))
+
+image_tensor, _ = transformations((image, None))
+image_tensor = image_tensor.type(torch.FloatTensor).unsqueeze(0)
+
+result_pts = model(image_tensor)
+
+# Scale bachk all key-points
+result_pts = result_pts * 50.0 + 100
 ```
 
 Further details can be found in [Evaluate.ipynb](./Evaluate.ipynb)
