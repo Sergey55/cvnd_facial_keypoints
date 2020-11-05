@@ -95,7 +95,7 @@ Further details can be found in [Evaluate.ipynb](./Evaluate.ipynb)
 
 Repository contains next files and folders:
 
-* [data](./data) - Images sed for model training and testing.
+* [data](./data) - Image set for model training and testing.
 * [images](./images) - Images used in this readme.
 * [savem_models](./saved_models) - Archived PyTorch Lightning logs and model state.
 * [datamodule.py](./datamodule.py) - Pytorch Lightning datamodule which can be used for obtaining dataloader for train/test dataset.
