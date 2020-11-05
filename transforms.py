@@ -16,7 +16,8 @@ class Normalize(object):
             
         # scale keypoints to be centered around 0 with a range of [-1, 1]
         # mean = 100, sqrt = 50, so, pts should be (pts - 100)/50
-        key_pts_copy = (key_pts_copy - 100)/50.0
+        if key_pts is not None:
+            key_pts_copy = (key_pts_copy - 100)/50.0
 
         return image_copy, key_pts_copy
 
@@ -51,7 +52,8 @@ class Rescale(object):
         img = cv2.resize(image, (new_w, new_h))
 
         # scale the pts, too
-        key_pts = key_pts * [new_w / w, new_h / h]
+        if key_pts is not None:
+            key_pts = key_pts * [new_w / w, new_h / h]
 
         return img, key_pts
 
@@ -84,7 +86,8 @@ class RandomCrop(object):
         image = image[top: top + new_h,
                       left: left + new_w]
 
-        key_pts = key_pts - [left, top]
+        if key_pts is not None:
+            key_pts = key_pts - [left, top]
 
         return image, key_pts
 
@@ -104,5 +107,12 @@ class ToTensor(object):
         # numpy image: H x W x C
         # torch image: C X H X W
         image = image.transpose((2, 0, 1))
+
+        image_tensor = torch.from_numpy(image)
+
+        if key_pts is not None and key_pts.any():
+            key_pts_tensor = torch.from_numpy(key_pts)
+        else:
+            key_pts_tensor = torch.empty((2, 68))
         
-        return torch.from_numpy(image), torch.from_numpy(key_pts)
+        return image_tensor, key_pts_tensor
