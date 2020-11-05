@@ -40,7 +40,7 @@ afterward your prompt will look similar to the following:
 
 ## Data
 
-All of the data needed to train a neural network is in the repository, in subdirectory `data`. Thid drt of image data has been extracted deom the [YouTube Faces Dataset](https://www.cs.tau.ac.il/~wolf/ytfaces/), which includes videos of people in YouTube videos. These videos have been fed through some processing steps and turned into sets of image frames containing one face and the associated keypoints.
+All of the data needed to train a neural network is in the repository, in subdirectory `data`. This set of image data has been extracted from the [YouTube Faces Dataset](https://www.cs.tau.ac.il/~wolf/ytfaces/), which includes videos of people in YouTube videos. These videos have been fed through some processing steps and turned into sets of image frames containing one face and the associated keypoints.
 
 ## Architecture
 
